@@ -181,7 +181,14 @@ func downloadSubtitles(movie OMDbResponse, moviePath string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	srtFilePath := strings.Replace(moviePath, filepath.Ext(moviePath), ".srt", 1)
+	// Find the largest video file in the specified directory
+	largestVideoFile, err := findLargestVideoFile(moviePath)
+	if err != nil {
+		return fmt.Errorf("failed to find largest video file: %v", err)
+	}
+
+	// Replace the extension with .srt
+	srtFilePath := strings.Replace(largestVideoFile, filepath.Ext(largestVideoFile), ".srt", 1)
 
 	if _, err := os.Stat(srtFilePath); err == nil {
 		fmt.Printf("Subtitle already exists for: %s, skipping...\n", movie.Title)
@@ -189,20 +196,6 @@ func downloadSubtitles(movie OMDbResponse, moviePath string) error {
 	}
 
 	fmt.Printf("Searching subtitles for: %s\n", movie.Title)
-	//	movies, _, err := client.Find.Features(ctx, &opensubtitles.FeatureOptions{ImdbID: movie.ImdbID})
-	//	if err != nil {
-	//		return fmt.Errorf("error searching for movie: %v", err)
-	//	}
-	//
-	//
-	//	if len(movies.Items) == 0 {
-	//		return fmt.Errorf("no movies found for title: %s", movie.Title)
-	//	}
-	//
-	//	imdbID, err := strconv.Atoi(movie.ImdbID)
-	//	if err != nil {
-	//		return fmt.Errorf("error converting movie ID: %v", err)
-	//	}
 
 	subtitles, _, err := client.Find.Subtitles(ctx, &opensubtitles.SubtitlesOptions{ImdbID: movie.ImdbID, Languages: "en"})
 	if err != nil {
@@ -230,4 +223,44 @@ func downloadSubtitles(movie OMDbResponse, moviePath string) error {
 
 	fmt.Printf("Downloaded subtitles for %s and saved as %s\n", movie.Title, srtFilePath)
 	return nil
+}
+
+func findLargestVideoFile(dir string) (string, error) {
+	var largestFile string
+	var largestSize int64
+
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if !info.IsDir() && isVideoFile(path) {
+			if info.Size() > largestSize {
+				largestSize = info.Size()
+				largestFile = path
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	if largestFile == "" {
+		return "", fmt.Errorf("no video files found in directory: %s", dir)
+	}
+
+	return largestFile, nil
+}
+
+func isVideoFile(path string) bool {
+	ext := strings.ToLower(filepath.Ext(path))
+	videoExtensions := []string{".mp4", ".mkv", ".mov", ".avi", ".wmv", ".flv", ".webm"}
+	for _, v := range videoExtensions {
+		if ext == v {
+			return true
+		}
+	}
+	return false
 }
