@@ -107,7 +107,6 @@ func main() {
 		// OpenSubtitles integration
 		if err := downloadSubtitles(result, filepath.Join(torrentPath, torrentName)); err != nil {
 			fmt.Printf("Error downloading subtitles: %v\n", err)
-			return
 		}
 
 		err = os.Rename(filepath.Join(torrentPath, torrentName), destinationPath)
