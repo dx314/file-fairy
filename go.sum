@@ -1,5 +1,5 @@
-github.com/TheForgotten69/go-opensubtitles v1.0.1-0.20240521104513-06779c583fea h1:ZobhiyKKotSMC3Xp8owspD0NXMwhbFHg2alrigURXcc=
-github.com/TheForgotten69/go-opensubtitles v1.0.1-0.20240521104513-06779c583fea/go.mod h1:hyaw2Ehbbz9VNUlj6uQwukCTTfzII28mY9mJVqSC53s=
+github.com/dx314/go-opensubtitles v0.0.0-20240609145405-68bfcf7a3000 h1:qmK9F/fZ5lNimQLDnECDvqtC/Ysyr+iDrNFWLMlRQf4=
+github.com/dx314/go-opensubtitles v0.0.0-20240609145405-68bfcf7a3000/go.mod h1:hyaw2Ehbbz9VNUlj6uQwukCTTfzII28mY9mJVqSC53s=
 github.com/google/go-cmp v0.5.2 h1:X2ev0eStA3AbceY54o37/0PQ/UWqKEiiO2dKL5OPaFM=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD/fhyJ8=
